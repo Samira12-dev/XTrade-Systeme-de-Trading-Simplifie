@@ -13,6 +13,9 @@ public class TradingPlatform {
         this.traderList = traderList;
     }
 
+    public TradingPlatform(String xtrading) {
+    }
+
     public String getNameCompany() {
         return nameCompany;
     }
@@ -44,4 +47,34 @@ public class TradingPlatform {
     public void setTraderList(List<Trader> traderList) {
         this.traderList = traderList;
     }
+    //add trader
+      public void addTrader(int id,String fullName , double soldInitial){
+       Trader trader= new Trader(id,fullName,soldInitial);
+       traderList.add(trader);
+          System.out.println("Trader added "+fullName+"\n"+ " number "+trader.getNumber());
+    }
+
+    //addAsset
+   public void addAsset(Asset asset){
+        for(Asset a :assetList){
+            if(a.getCode().equals(asset.getCode())){
+                System.out.println("Asset already exist.");
+                return;
+            }
+        }
+       assetList.add(asset);
+       System.out.println(asset.getCode()+" "+asset.getName()+" "+asset.getPrice());
+
+   }
+    // display all assets
+    public void displayAll(){
+        System.out.println("List of Available Assets :");
+        for (Asset as : assetList){
+            System.out.println(as.getCode()+" | "+as.getName()+" | "+as.getPrice()+" | "+as.getType());
+        }
+
+    }
+
+
+
 }

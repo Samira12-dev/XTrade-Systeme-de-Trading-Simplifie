@@ -1,22 +1,12 @@
 import java.util.List;
 
 public class Stock extends Asset{
-private String typeStock;
 private int quantity;
 
 
-    public Stock(String code, String name, double price, List<Transaction> transactions, String typeStock, int quantity) {
-        super(code, name, price, transactions);
-        this.typeStock = typeStock;
+    public Stock(String code, String name, double price, List<Transaction> transactions, int quantity) {
+        super(code, name, price,"Stock", transactions);
         this.quantity = quantity;
-    }
-
-    public String getTypeStock() {
-        return typeStock;
-    }
-
-    public void setTypeStock(String typeStock) {
-        this.typeStock = typeStock;
     }
 
     public int getQuantity() {

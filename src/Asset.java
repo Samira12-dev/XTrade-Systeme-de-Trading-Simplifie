@@ -5,12 +5,14 @@ public abstract class  Asset {
     private String code;
     private String name;
     private double price;
+    private String type;
     private List<Transaction> transactions;
 
-    public Asset(String code, String name, double price,List<Transaction> transactions) {
+    public Asset(String code, String name, double price,String type,List<Transaction> transactions) {
         this.code = code;
         this.name = name;
         this.price = price;
+        this.type=type;
         this.transactions= new ArrayList<>();
     }
 
@@ -36,6 +38,12 @@ public abstract class  Asset {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+    public String getType(){
+        return type;
+    }
+    public void setType(String type){
+        this.type=type;
     }
 
     public List<Transaction> getTransactions() {

@@ -1,15 +1,19 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Trader extends Person{
     private int number;
+    private static int count=1;
     private double soldInitiale;
+    private Portfolio<Asset>port;
     private List<Transaction>transactions;
 
-    public Trader(int id, String fullName, int number, double soldInitiale, List<Transaction> transactions) {
+    public Trader(int id, String fullName,  double soldInitiale) {
         super(id, fullName);
-        this.number = number;
+        this.number = count++;
         this.soldInitiale = soldInitiale;
-        this.transactions = transactions;
+
+        this.transactions = new ArrayList<>();
     }
 
     public int getNumber() {
@@ -35,4 +39,22 @@ public class Trader extends Person{
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
+
+
+    public void seeAssets( TradingPlatform pt){
+        System.out.println(getFullName()+ " See market assets :");
+        System.out.print("Available assets :");
+        pt.displayAll();
+
+    }
+    public void buyAsset(Asset asset, double quantity){
+        double total = asset.getPrice() * quantity;
+        if(total> soldInitiale){
+            System.out.println("Balance not  enough");
+            return;
+        }
+        soldInitiale -=total;
+    }
+
+
 }
