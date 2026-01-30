@@ -40,21 +40,22 @@ public class Trader extends Person{
         this.transactions = transactions;
     }
 
+    public Portfolio<Asset> getPort() {
+        return port;
+    }
 
-    public void seeAssets( TradingPlatform pt){
-        System.out.println(getFullName()+ " See market assets :");
+    public void setPort(Portfolio<Asset> port) {
+        this.port = port;
+    }
+
+    public void seeAssets(TradingPlatform pt){
+        System.out.println(" See market assets :");
         System.out.print("Available assets :");
         pt.displayAll();
 
     }
-    public void buyAsset(Asset asset, double quantity){
-        double total = asset.getPrice() * quantity;
-        if(total> soldInitiale){
-            System.out.println("Balance not  enough");
-            return;
-        }
-        soldInitiale -=total;
-    }
+
+
 
 
 }

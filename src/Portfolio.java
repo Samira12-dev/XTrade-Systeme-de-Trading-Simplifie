@@ -21,23 +21,42 @@ public class Portfolio <T extends Asset>{
         this.trader = trader;
     }
 
-    public List<T> getAssets() {
+    public Map<T, Integer> getAssets() {
         return assets;
     }
 
-    public void setAssets(List<T> assets) {
+    public void setAssets(Map<T, Integer> assets) {
         this.assets = assets;
     }
 
     //  add Asset
-   public void addAsset(T ast){
-        assets.add(ast);
-       System.out.println("asset added to portfolio "+ast.getName());
+   public void addAsset(T ast,int quantity){
+       if(quantity <=0){
+           System.out.println("Quantity must be positive");
+           return;
+       }
+        if(assets.containsKey(ast)){
+            int oldQut= assets.get(ast);
+            assets.put(ast ,oldQut + quantity);
+        }else {
+            assets.put(ast , quantity);
+        }
+       System.out.println("asset added to portfolio "+ast.getName()+"Quantity :"+quantity);
    }
    public void displayInfoAsset(){
-       System.out.println("Portfolio of :"+trader.getFullName());
-       for (T as :assets){
-           System.out.println(as.getCode()+" | "+ as.getName()+" | "+as.getPrice());
+       System.out.println(" Portfolio of :"+trader.getFullName());
+       double totalValue =0;
+
+       for(Map.Entry<T,Integer> items : assets.entrySet()){
+           T asset =  items.getKey();
+           int quantity= items.getValue();
+
+           double value = asset.getPrice() *quantity;
+           totalValue += value;
+           System.out.println(asset.getCode()+" | "+asset.getName()+" | "+asset.getPrice()+ " | Quanitity"+quantity + " | value :"+value );
        }
    }
+
 }
+
+
