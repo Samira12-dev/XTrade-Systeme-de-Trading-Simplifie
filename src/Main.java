@@ -145,7 +145,15 @@ public class Main {
                     System.out.println("Portfolio :");
                     trader.getPort().displayInfoAsset();
                 case 4:
-                    market.diplayTransaction();
+                    System.out.print("Enter trader ID ");
+                    int idT =sc.nextInt();
+                    Trader tr= market.findTrader(idT);
+                    if(tr == null){
+                        System.out.println("Trader not found ");
+                    }else {
+                        market.diplayTransaction();
+                    }
+
                     break;
                 case 5:
                     System.out.println("Back to menu ");
