@@ -3,10 +3,15 @@ import java.util.List;
 public class CryptoCurrency extends Asset{
     private double amount;
 
-    public CryptoCurrency(String code, String name, double price, List<Transaction> transactions,double amount) {
-        super(code, name, price, "Crypto",transactions);
+
+    public CryptoCurrency(String code, String name, double price,double amount) {
+        super(code, name, price, "Crypto");
         this.amount = amount;
     }
+    public CryptoCurrency(String code, String name, double price,String type) {
+        super(code, name, price, type);
+    }
+
 
     public double getAmount() {
         return amount;

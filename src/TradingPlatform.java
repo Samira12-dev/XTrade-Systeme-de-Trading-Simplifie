@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,15 +9,15 @@ public class TradingPlatform {
     private List<Transaction>transactionList;
     private List<Trader> traderList;
 
-    public TradingPlatform(String nameCompany, List<Asset> assetList, List<Transaction> transactionList, List<Trader> traderList) {
+    public TradingPlatform(String nameCompany) {
         this.nameCompany = nameCompany;
-        this.assetList = assetList;
-        this.transactionList = transactionList;
-        this.traderList = traderList;
+        this.assetList = new ArrayList<>();
+        this.transactionList = new ArrayList<>();
+        this.traderList = new ArrayList<>();
     }
 
-    public TradingPlatform(String xtrading) {
-    }
+//    public TradingPlatform(String xtrading) {
+//    }
 
     public String getNameCompany() {
         return nameCompany;
@@ -52,12 +53,12 @@ public class TradingPlatform {
 
 
     //add trader
-      public void addTrader(int id,String fullName , double soldInitial){
-       Trader trader= new Trader(id,fullName,soldInitial);
+      public void addTrader(String fullName , double soldInitial){
+       Trader trader= new Trader(fullName,soldInitial);
        Portfolio<Asset> portfolio =new Portfolio<>(trader);
        trader.setPort(portfolio);
        traderList.add(trader);
-          System.out.println("Trader added "+fullName+"\n"+ " number "+trader.getNumber());
+          System.out.println("Trader added :"+fullName+"\n"+ " number "+trader.getNumber());
     }
 
     //find trader
@@ -107,15 +108,7 @@ public class TradingPlatform {
          tr.setSoldInitiale(tr.getSoldInitiale() - total);
          tr.getPort().addAsset(asset,quantity);
 
-         Transaction trs= new Transaction(
-                 "Buy",
-                 quantity,
-                 asset.getPrice(),
-                 LocalDate.now(),
-                 tr,
-                 asset
-         );
-         transactionList.add(trs);
+         transactionList.add(new Transaction("Sell",quantity,asset.getPrice(),LocalDate.now(),trader,asset));
         System.out.println("Bought "+quantity+ " of "+asset.getName()+ " for trader "+trader.getFullName()+ ". Total cost "+total);
     }
 
@@ -140,28 +133,20 @@ public class TradingPlatform {
         }
         double totalPrx= asset.getPrice() * quantity;
         trader.setSoldInitiale(trader.getSoldInitiale() +totalPrx );
-        Transaction trs = new Transaction(
-                "Sell",
-                quantity,
-                asset.getPrice(),
-                LocalDate.now(),
-                trader,
-                asset
-        );
-        transactionList.add(trs);
+
+        transactionList.add(new Transaction("Buy",quantity,asset.getPrice(),LocalDate.now(),trader,asset));
     }
 
 
-    // displayPortfolio
-
-    public void displayPortfolio(){
-        if(assetList.isEmpty()){
-            System.out.println("Portfolio is empty ");
+    // display Transaction
+    public void diplayTransaction(){
+        if(transactionList.isEmpty()){
+            System.out.println("No trancsatino yet ");
             return;
         }
-        double totalvalue =0;
-        System.out.println("Portfolio");
-        for(Map.Entry<Asset , Integer> items :)
-
+        for (Transaction tr :transactionList){
+            System.out.println(tr.getDate() +" | "+tr.getTrader().getNumber()+" | "+tr.getType()+" |"+ tr.getAsste().getName()+" | "+tr.getQuantity()+" | "+tr.getPrice());
+        }
     }
+
 }

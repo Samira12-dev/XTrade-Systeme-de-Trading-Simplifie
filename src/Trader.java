@@ -8,11 +8,10 @@ public class Trader extends Person{
     private Portfolio<Asset>port;
     private List<Transaction>transactions;
 
-    public Trader(int id, String fullName,  double soldInitiale) {
-        super(id, fullName);
+    public Trader( String fullName,  double soldInitiale) {
+        super(count, fullName);
         this.number = count++;
         this.soldInitiale = soldInitiale;
-
         this.transactions = new ArrayList<>();
     }
 
