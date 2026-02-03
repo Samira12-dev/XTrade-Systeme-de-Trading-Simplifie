@@ -7,7 +7,8 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        TradingPlatform  market = new TradingPlatform("Xtrading");
+      //  TradingPlatform  market = new TradingPlatform("Xtrading");
+        TradingPlatform market = TradingPlatform.getInstance();
         Scanner sc= new Scanner(System.in);
         int choix;
         do {

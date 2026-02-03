@@ -1,31 +1,29 @@
+import javax.swing.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TradingPlatform {
-    private String nameCompany;
+    private static TradingPlatform instance;
     private List<Asset> assetList;
-    private List<Transaction>transactionList;
+    private List<Transaction> transactionList;
     private List<Trader> traderList;
 
-    public TradingPlatform(String nameCompany) {
-        this.nameCompany = nameCompany;
+    private TradingPlatform() {
         this.assetList = new ArrayList<>();
         this.transactionList = new ArrayList<>();
         this.traderList = new ArrayList<>();
     }
 
+    public static TradingPlatform getInstance() {
+        if (instance == null) {
+            instance = new TradingPlatform();
+        }
+        return instance;
+    }
+Scanner sc=new Scanner(System.in);
 //    public TradingPlatform(String xtrading) {
 //    }
 
-    public String getNameCompany() {
-        return nameCompany;
-    }
-
-    public void setNameCompany(String nameCompany) {
-        this.nameCompany = nameCompany;
-    }
 
     public List<Asset> getAssetList() {
         return assetList;
@@ -53,100 +51,152 @@ public class TradingPlatform {
 
 
     //add trader
-      public void addTrader(String fullName , double soldInitial){
-       Trader trader= new Trader(fullName,soldInitial);
-       Portfolio<Asset> portfolio =new Portfolio<>(trader);
-       trader.setPort(portfolio);
-       traderList.add(trader);
-          System.out.println("Trader added :"+fullName+"\n"+ " number "+trader.getNumber());
+    public void addTrader(String fullName, double soldInitial) {
+        Trader trader = new Trader(fullName, soldInitial);
+        Portfolio<Asset> portfolio = new Portfolio<>(trader);
+        trader.setPort(portfolio);
+        traderList.add(trader);
+        System.out.println("Trader added :" + fullName + "\n" + " number " + trader.getNumber());
     }
 
     //find trader
-    Trader findTrader(int id ){
-        for (Trader tr :traderList){
-            if(tr.getId()== id){
+    Trader findTrader(int id) {
+        for (Trader tr : traderList) {
+            if (tr.getId() == id) {
                 return tr;
             }
         }
-        return  null;
+        return null;
     }
+
     //addAsset
-   public void addAsset(Asset asset){
-        for(Asset a :assetList){
-            if(a.getCode().equals(asset.getCode())){
+    public void addAsset(Asset asset) {
+        for (Asset a : assetList) {
+            if (a.getCode().equals(asset.getCode())) {
                 System.out.println("Asset already exist.");
                 return;
             }
         }
-       assetList.add(asset);
-       System.out.println(asset.getCode()+" "+asset.getName()+" "+asset.getPrice());
+        assetList.add(asset);
+        System.out.println(asset.getCode() + " " + asset.getName() + " " + asset.getPrice());
 
-   }
+    }
+
     // display all assets
-    public void displayAll(){
+    public void displayAll() {
         System.out.println("List of Available Assets :");
-        for (Asset as : assetList){
-            System.out.println(as.getCode()+" | "+as.getName()+" | "+as.getPrice()+" | "+as.getType());
+        for (Asset as : assetList) {
+            System.out.println(as.getCode() + " | " + as.getName() + " | " + as.getPrice() + " | " + as.getType());
         }
 
     }
-    public void buyAsset(Trader trader,Asset asset, int quantity) {
-        Trader tr = findTrader(trader.getId());
-         if(!assetList.contains(asset)){
-             System.out.println("Asset not available");
-             return;
-         }
-         if(quantity<=0){
-             System.out.println(" Quantity must be positive ");
-             return;
-         }
-         double total = asset.getPrice() * quantity;
-         if(total> tr.getSoldInitiale()){
-             System.out.println(" Balance not enough");
-             return ;
-         }
-         tr.setSoldInitiale(tr.getSoldInitiale() - total);
-         tr.getPort().addAsset(asset,quantity);
 
-         transactionList.add(new Transaction("Sell",quantity,asset.getPrice(),LocalDate.now(),trader,asset));
-        System.out.println("Bought "+quantity+ " of "+asset.getName()+ " for trader "+trader.getFullName()+ ". Total cost "+total);
+    public void buyAsset(Trader trader, Asset asset, int quantity) {
+        Trader tr = findTrader(trader.getId());
+        if (!assetList.contains(asset)) {
+            System.out.println("Asset not available");
+            return;
+        }
+        if (quantity <= 0) {
+            System.out.println(" Quantity must be positive ");
+            return;
+        }
+        double total = asset.getPrice() * quantity;
+        if (total > tr.getSoldInitiale()) {
+            System.out.println(" Balance not enough");
+            return;
+        }
+        tr.setSoldInitiale(tr.getSoldInitiale() - total);
+        tr.getPort().addAsset(asset, quantity);
+
+        transactionList.add(new Transaction("Buy", quantity, asset.getPrice(), LocalDate.now(), trader, asset));
+        System.out.println("Bought " + quantity + " of " + asset.getName() + " for trader " + trader.getFullName() + ". Total cost " + total);
     }
 
-    public void sellAsset(Trader trader, Asset asset, int quantity){
-        if(!trader.getPort().getAssets().containsKey(asset)){
+    public void sellAsset(Trader trader, Asset asset, int quantity) {
+        if (!trader.getPort().getAssets().containsKey(asset)) {
             System.out.println("Asset not in portfolio");
             return;
         }
-        if(quantity<=0){
+        if (quantity <= 0) {
             System.out.println("Quantity must be positive.");
             return;
         }
-        int quantityDispo= trader.getPort().getAssets().get(asset);
-        if(quantity > quantityDispo){
+        int quantityDispo = trader.getPort().getAssets().get(asset);
+        if (quantity > quantityDispo) {
             System.out.println("Not enough quantity to sell. You have: " + quantityDispo);
             return;
         }
-        if(quantity == quantityDispo ){
+        if (quantity == quantityDispo) {
             trader.getPort().getAssets().remove(asset);
-        }else {
-            trader.getPort().getAssets().put(asset,  quantityDispo-quantity);
+        } else {
+            trader.getPort().getAssets().put(asset, quantityDispo - quantity);
         }
-        double totalPrx= asset.getPrice() * quantity;
-        trader.setSoldInitiale(trader.getSoldInitiale() +totalPrx );
+        double totalPrx = asset.getPrice() * quantity;
+        trader.setSoldInitiale(trader.getSoldInitiale() + totalPrx);
 
-        transactionList.add(new Transaction("Buy",quantity,asset.getPrice(),LocalDate.now(),trader,asset));
+        transactionList.add(new Transaction("Sell", quantity, asset.getPrice(), LocalDate.now(), trader, asset));
     }
 
 
     // display Transaction
-    public void diplayTransaction(){
-        if(transactionList.isEmpty()){
-            System.out.println("No trancsatino yet ");
+    public void diplayTransaction() {
+        if (transactionList.isEmpty()) {
+            System.out.println("No trancsation yet ");
             return;
         }
-        for (Transaction tr :transactionList){
-            System.out.println(tr.getDate() +" | "+tr.getTrader().getNumber()+" | "+tr.getType()+" |"+ tr.getAsste().getName()+" | "+tr.getQuantity()+" | "+tr.getPrice());
+
+        for (Transaction tr : transactionList) {
+            System.out.println(tr.getDate() + " | " + tr.getTrader().getNumber() + " | " + tr.getType() + " |" + tr.getAsste().getName() + " | " + tr.getQuantity() + " | " + tr.getPrice());
         }
     }
+
+
+    //================================Second Party============================================
+    //================================Second Party============================================
+
+    public void transactiionOftrader(){
+        System.out.println("Enter trader ID :");
+        int id =sc.nextInt();
+        transactionList.stream().filter(t->t.getTrader().getNumber()==id).forEach(System.out::println);
+
+    }
+    public List<Transaction> FilterParType(String type, String code,LocalDate date) {
+        List<Transaction> filterParType = transactionList.stream()
+                .filter(e -> e.getType().equals(type))
+                .filter(e -> e.getAsste().getCode().equals(code))
+                .filter(e -> e.getDate().equals(date)).toList();
+                filterParType.forEach(e-> System.out.println(e));
+                return filterParType;
+    }
+
+    public List<Transaction> TrierParDate_Montant(){
+        List<Transaction> list= transactionList.stream()
+                .sorted(Comparator.comparing(Transaction::getDate).thenComparing(Transaction::getTotal)).toList();
+                list.forEach(System.out::println);
+        return list;
+    }
+
+//    public double Clc(){
+//        transactionList.stream().filter(Comparator.comparing(Transaction::getType).equals("buy"))
+//    }
+
+
+
+
+
+
+    public List<Asset> ass(String name){
+        List<Asset>list= new ArrayList<>();
+        for(Transaction tr :transactionList){
+            if(tr.getAsste().getName().equals(name)){
+                list.add(tr.getAsste());
+
+            }
+        }
+        return list;
+    }
+
+
 
 }

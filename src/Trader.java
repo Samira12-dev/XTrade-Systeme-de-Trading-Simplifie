@@ -54,7 +54,18 @@ public class Trader extends Person{
 
     }
 
-
+    public void addTransaction(Transaction transaction){
+        transactions.add(transaction);
+    }
+    public List<Transaction>getAllTransaction(){
+        return transactions;
+    }
+     public void displayAllTransaction(){
+        Trader trader = new Trader("samira",1999.0);
+        for(Transaction tr:trader.getAllTransaction()){
+            System.out.println(tr);
+        }
+    }
 
 
 }
