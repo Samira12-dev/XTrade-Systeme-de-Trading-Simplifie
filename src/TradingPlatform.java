@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 public class TradingPlatform {
     private static TradingPlatform instance;
@@ -161,12 +164,22 @@ Scanner sc=new Scanner(System.in);
         transactionList.stream().filter(t->t.getTrader().getNumber()==id).forEach(System.out::println);
 
     }
-    public List<Transaction> FilterParType(String type, String code,LocalDate date) {
+    public List<Transaction> FilterParType() {
+        System.out.println("Enter asset type (Buy/Sell) :");
+        String type=sc.nextLine();
+        System.out.println("Enter asset code( btc.,apl.) :");
+        String code =sc.nextLine();
+        System.out.println("Enter asset date before (yyyy-MM-dd):");
+        String dateBefore=sc.nextLine();
+        System.out.println("Enter asset date after (yyyy-MM-dd):");
+        String dateAfter= sc.nextLine();
+        LocalDate datebef= LocalDate.parse(dateBefore);
+        LocalDate dateAft= LocalDate.parse(dateAfter);
         List<Transaction> filterParType = transactionList.stream()
                 .filter(e -> e.getType().equals(type))
                 .filter(e -> e.getAsste().getCode().equals(code))
-                .filter(e -> e.getDate().equals(date)).toList();
-                filterParType.forEach(e-> System.out.println(e));
+                .filter(e -> !e.getDate().isBefore(datebef)&& !e.getDate().isAfter(dateAft)).toList();
+                filterParType.forEach(System.out::println);
                 return filterParType;
     }
 
@@ -177,9 +190,21 @@ Scanner sc=new Scanner(System.in);
         return list;
     }
 
-//    public double Clc(){
-//        transactionList.stream().filter(Comparator.comparing(Transaction::getType).equals("buy"))
-//    }
+public void  calc(){
+        // clc volume actif
+       Map<Asset,Double> clcVolume= transactionList.stream()
+               .collect(Collectors.groupingBy(Transaction::getAsste, Collectors.summingDouble(Transaction::getQuantity)));
+       clcVolume.forEach((assetList,v)-> System.out.println(v));
+
+       DoubleStream clcAchet= transactionList.stream().filter(t->t.getAsste().getType().equals("buy"))
+               .mapToDouble(t->t.getPrice()* t.getQuantity());
+       clcAchet.forEach(System.out::println);
+
+       DoubleStream clcVente= transactionList.stream().filter(t->t.getType().equals("Sell"))
+               .mapToDouble(t->t.getPrice()* t.getQuantity());
+       clcVente.forEach((v)-> System.out.println(v));
+}
+
 
 
 
