@@ -211,6 +211,17 @@ public void calcVolumeTrade() {
     clcVolumeTrader.forEach((tr,t)-> System.out.println(tr.getFullName()+" "+t));
 }
 
+// Classement des traders par volume (top N traders)
+
+    public void ClassementTopNTraders(int N){
+     Map<Trader, Double> topNTrader= transactionList.stream()
+             .collect(Collectors.groupingBy(t->t.getTrader()
+     ,Collectors.summingDouble(t->t.getPrice()*t.getQuantity())));
+     List<Map.Entry<Trader, Double>>top= topNTrader.entrySet().stream()
+             .sorted(Map.Entry.<Trader,Double>comparingByValue().reversed()).limit(N).toList();
+     top.forEach(System.out::println);
+    }
+
 
 
 
