@@ -190,19 +190,25 @@ Scanner sc=new Scanner(System.in);
         return list;
     }
 
-public void  calc(){
+public void  calcVolumeParActif(){
         // clc volume actif
        Map<Asset,Double> clcVolume= transactionList.stream()
                .collect(Collectors.groupingBy(Transaction::getAsste, Collectors.summingDouble(Transaction::getQuantity)));
        clcVolume.forEach((assetList,v)-> System.out.println(v));
-
+// clc total achat
        DoubleStream clcAchet= transactionList.stream().filter(t->t.getAsste().getType().equals("buy"))
                .mapToDouble(t->t.getPrice()* t.getQuantity());
        clcAchet.forEach(System.out::println);
-
+// clc total vente
        DoubleStream clcVente= transactionList.stream().filter(t->t.getType().equals("Sell"))
                .mapToDouble(t->t.getPrice()* t.getQuantity());
        clcVente.forEach((v)-> System.out.println(v));
+}
+
+public void calcVolumeTrade() {
+    Map<Trader, Double> clcVolumeTrader= transactionList.stream().collect(Collectors.groupingBy(t->t.getTrader()
+            ,Collectors.summingDouble(t->t.getPrice()* t.getQuantity())));
+    clcVolumeTrader.forEach((tr,t)-> System.out.println(tr.getFullName()+" "+t));
 }
 
 

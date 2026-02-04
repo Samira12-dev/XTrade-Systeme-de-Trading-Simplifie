@@ -1,5 +1,6 @@
 import java.lang.management.PlatformLoggingMXBean;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -7,7 +8,7 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-      //  TradingPlatform  market = new TradingPlatform("Xtrading");
+//  TradingPlatform  market = new TradingPlatform("Xtrading");
         TradingPlatform market = TradingPlatform.getInstance();
         Scanner sc= new Scanner(System.in);
         int choix;
@@ -101,18 +102,18 @@ public class Main {
 
             switch(choix){
                 case 1:
-                 if(market.getAssetList().isEmpty()){
-                     System.out.println("No asset available ");
-                     break;
-                 }
+                    if(market.getAssetList().isEmpty()){
+                        System.out.println("No asset available ");
+                        break;
+                    }
                     System.out.println("available assets :");
-                 for(int i=0; i<market.getAssetList().size();i++){
-                     Asset a = market.getAssetList().get(i);
-                     System.out.println( i+": " + a.getName() + " | Price: " + a.getPrice());
-                 }
+                    for(int i=0; i<market.getAssetList().size();i++){
+                        Asset a = market.getAssetList().get(i);
+                        System.out.println( i+": " + a.getName() + " | Price: " + a.getPrice());
+                    }
                     System.out.println("Select asset index ");
-                 int ind= sc.nextInt();
-                 sc.nextLine();
+                    int ind= sc.nextInt();
+                    sc.nextLine();
                     System.out.println("Quantity :");
                     int qut= sc.nextInt();
                     sc.nextLine();
@@ -156,6 +157,8 @@ public class Main {
 
             }
         }while (choix !=5);
+
+
     }
 
 }
