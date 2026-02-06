@@ -205,6 +205,19 @@ public void  calcVolumeParActif(){
        clcVente.forEach((v)-> System.out.println(v));
 }
 
+
+//  total order passe d'un trader
+
+    public int orderPasse (Trader trader){
+        int total =0;
+        for(Transaction tr :transactionList){
+            if (tr.getTrader().equals(trader)){
+                total++;
+            }
+        }
+        return total;
+    }
+
 public void calcVolumeTrader() {
     Map<Trader, Double> clcVolumeTrader= transactionList.stream().collect(Collectors.groupingBy(t->t.getTrader()
             ,Collectors.summingDouble(t->t.getPrice()* t.getQuantity())));
@@ -221,8 +234,6 @@ public void calcVolumeTrader() {
              .sorted(Map.Entry.<Trader,Double>comparingByValue().reversed()).limit(N).toList();
      top.forEach(System.out::println);
     }
-
-
 
 
 
