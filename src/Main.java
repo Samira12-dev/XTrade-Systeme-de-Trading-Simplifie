@@ -1,8 +1,6 @@
 import java.lang.management.PlatformLoggingMXBean;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -38,7 +36,13 @@ public class Main {
             System.out.println("1. Add trader :");
             System.out.println("2. Add asset :");
             System.out.println("3. Display Asset :");
-            System.out.println("4. Back");
+            System.out.println("4.Display all the transactions :");
+            System.out.println("5.Filter transactions :");
+            System.out.println("6.Filter transactions by date :");
+            System.out.println("7.Filter transactions by amount :");
+            System.out.println("8.Total amount buy/ sell :");
+            System.out.println("9.volume traded per asset");
+            System.out.println("10. Back");
             choix =sc.nextInt();
             sc.nextLine();
 
@@ -73,13 +77,31 @@ public class Main {
                     market.displayAll();
                     break;
                 case 4:
+                    market.diplayTransaction();
+                    break;
+                case 5:
+                    System.out.println("type (Buy/Sell ) : ");
+                    String tp = sc.nextLine();
+                    if(tp.isEmpty()) type =null;
+                    System.out.println("nom asset () : ");
+                    String aset =sc.nextLine();
+                    if (aset.isEmpty()) asset =null;
+                    market.FilterParType();
+                    break;
+                case 6:
+                    market.TrierParDate();
+                    break;
+                case 7:
+                    market.sortTransactionsByAmount(null,null,null,null);
+                    break;
+                case 10:
                     System.out.println("Back to main menu");
                     break;
                 default:
                     System.out.println("Invalid choice");
 
             }
-        }while (choix!=4);
+        }while (choix!=10);
     }
     public static void traderMenu(Scanner sc, TradingPlatform market){
         System.out.print(" Enter Trader ID :");
@@ -96,7 +118,8 @@ public class Main {
             System.out.println("2. Sell asset :");
             System.out.println("3. Display portfolio :");
             System.out.println("4. Display Transactions :");
-            System.out.println("5. Back");
+            System.out.println("5. display transactions of the trader ");
+            System.out.println("6. Back");
             choix=sc.nextInt();
             sc.nextLine();
 
@@ -150,13 +173,15 @@ public class Main {
                     market.diplayTransaction();
                     break;
                 case 5:
+                    market.transactiionOftrader();
+                case 6:
                     System.out.println("Back to menu ");
                     break;
                 default:
                     System.out.println(" Invalid choice");
 
             }
-        }while (choix !=5);
+        }while (choix !=6);
 
 
     }

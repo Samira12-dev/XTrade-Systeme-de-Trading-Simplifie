@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -85,6 +86,15 @@ Scanner sc=new Scanner(System.in);
 
     }
 
+    public Trader gettrader(String trader){
+        for ( Trader t:traderList){
+            if(t.getFullName().equals(trader)){
+                return t;
+            }
+        }
+        return null;
+    }
+
     // display all assets
     public void displayAll() {
         System.out.println("List of Available Assets :");
@@ -92,6 +102,10 @@ Scanner sc=new Scanner(System.in);
             System.out.println(as.getCode() + " | " + as.getName() + " | " + as.getPrice() + " | " + as.getType());
         }
 
+    }
+    public void dis(){
+        System.out.println(" all ");
+        assetList.stream().forEach(System.out::println);
     }
 
     public void buyAsset(Trader trader, Asset asset, int quantity) {
@@ -155,6 +169,8 @@ Scanner sc=new Scanner(System.in);
     }
 
 
+
+
     //================================Second Party============================================
     //================================Second Party============================================
 
@@ -183,11 +199,27 @@ Scanner sc=new Scanner(System.in);
                 return filterParType;
     }
 
-    public List<Transaction> TrierParDate_Montant(){
+    public List<Transaction> TrierParDate(){
         List<Transaction> list= transactionList.stream()
-                .sorted(Comparator.comparing(Transaction::getDate).thenComparing(Transaction::getTotal)).toList();
+                .sorted(Comparator.comparing(Transaction::getDate)).toList();
                 list.forEach(System.out::println);
         return list;
+    }
+    public List<Transaction> sortTransactionsByAmount(String type, String assetName, LocalDateTime startDate, LocalDateTime endDate) {
+        return FilterParType().stream()
+                .sorted(Comparator.comparing(t -> t.getPrice() * t.getQuantity()))  // Trie par montant ascendant
+                .collect(Collectors.toList());
+    }
+
+    // Méthode pour afficher les transactions triées par date
+    public void displaySortedByDate(String type, String assetName, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Transaction> sorted = TrierParDate();
+        if (sorted.isEmpty()) {
+            System.out.println("Aucune transaction trouvée avec les filtres appliqués.");
+        } else {
+            System.out.println("Transactions triées par date :");
+            sorted.forEach(System.out::println);
+        }
     }
 
 public void  calcVolumeParActif(){
@@ -235,10 +267,9 @@ public void calcVolumeTrader() {
      top.forEach(System.out::println);
     }
 
+    public void afficher(Asset as){
 
-
-
-
+    }
 
 
     public List<Asset> ass(String name){
@@ -253,5 +284,24 @@ public void calcVolumeTrader() {
     }
 
 
+public List<Asset> getlist(){
+        List<Asset> s=new ArrayList<>();
+        int i=0;
+        while (i<assetList.size()){
+            Asset a=assetList.get(i);
+            if(a.getCode().equals("btc")){
+                s.add(a);
+            }
+            i++;
+        }
+        return s;
+}
+public List<String > as(){
+        List<String >names=new ArrayList<>();
+        for(Asset a:assetList){
+            names.add(a.getName());
+        }
+        return names;
+}
 
 }

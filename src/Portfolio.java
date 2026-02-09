@@ -37,6 +37,7 @@ public class Portfolio <T extends Asset>{
        }
         if(assets.containsKey(ast)){
             int oldQut= assets.get(ast);
+
             assets.put(ast ,oldQut + quantity);
         }else {
             assets.put(ast , quantity);
@@ -57,6 +58,13 @@ public class Portfolio <T extends Asset>{
        }
    }
 
+   public double total_value_portfoliotrader(Trader tr){
+        double tot=0;
+        for(Map.Entry<Asset,Integer>e:tr.getPort().getAssets().entrySet()){
+            tot+= e.getKey().getPrice()*e.getValue();
+        }
+        return tot;
+   }
 }
 
 
